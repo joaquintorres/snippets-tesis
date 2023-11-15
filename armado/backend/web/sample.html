@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-dark">Sample setup</h6>
+        </div>
+        <div class="card-body">
+            <p>
+                Assign a name to the sample (otherwise a timestamp will be used).
+                The description field is required to improve the search.
+            </p>
+            <div class="my-3">
+                <label for="sample-name" class="form-label">Name</label>
+                <input class="form-control" type="text" placeholder="Sample name" aria-label=".form-control-lg example" id="sample-name" {% if name %}value="{{ name }}"{% endif %}>
+            </div>
+            <div class="my-3">
+                <label for="sample-name" class="form-label">Description</label>
+                <input class="form-control" type="text" placeholder="Description of sample" aria-label=".form-control-lg example" id="sample-description" {% if name %}value="{{ description }}"{% endif %}>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end mx-5 my-2 px-0">
+        <button type="submit" class="btn btn-dark ml-2" onclick="save()">Guardar</button>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function save(){
+            let req = new XMLHttpRequest();
+            req.open('POST', `/sample`, true);
+            req.onreadystatechange = function (aEvt) {
+                if (req.readyState === 4) {
+                    if(req.status === 200) {
+                        console.log("Ok");
+                        window.location = "/acquire"
+                    } else {
+                        console.log("Error loading page\n");
+                    }
+                }
+            };
+            let data = {
+                name: document.getElementById('sample-name').value,
+                description: document.getElementById('sample-description').value,
+            }
+            req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            req.send(JSON.stringify(data))
+        }
+    </script>
+
+{% endblock %}

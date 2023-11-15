@@ -1,0 +1,23 @@
+{
+  "fpm_config": {
+    "wavelengths": {
+      "r": 632,
+      "g": 520,
+      "b": 470
+    },
+    "sample_height_mm": 150,
+    "center": [
+      16,
+      16
+    ],
+    "matrix_size": 32,
+    "led_gap_mm": 6,
+    "objetive_na": 1.0,
+    "pixel_size_um": 2.4,
+    "image_size": [
+      5584,
+      3694
+    ],
+    "camera_min_time": 1.4
+  }
+}

@@ -1,0 +1,97 @@
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+                <div class="sidebar-brand-icon">
+                    <img src="/img/gigapixel_x2.svg" style="margin: 1px;">
+{#                    <i class="fas fa-microscope"></i>#}
+                </div>
+                <div class="sidebar-brand-text mx-3 gigapixel-font font-weight-normal">GIGAPIXEL</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item -->
+            <li class="nav-item {% if active == "status" %}active{% endif %}">
+                <a class="nav-link" href="/status">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Status</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Setup
+            </div>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item {% if active == "sample" %}active{% endif %}">
+                <a class="nav-link {% if not enabled %}disabled{% endif %}" href="/sample">
+                    <i class="fas fa-fw fa-vial"></i>
+                    <span>Sample</span></a>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item {% if active == "camera" %}active{% endif %}">
+                <a class="nav-link {% if not enabled %}disabled{% endif %}" href="/camera">
+                    <i class="fas fa-fw fa-camera"></i>
+                    <span>Camera</span></a>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item {% if active == "focus" %}active{% endif %}">
+                <a class="nav-link {% if not enabled %}disabled{% endif %}" href="/focus">
+                    <i class="fas fa-fw fa-microscope"></i>
+                    <span>Focus</span></a>
+            </li>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item {% if active == "illumination" %}active{% endif %}">
+                <a class="nav-link {% if not enabled %}disabled{% endif %}" href="/illumination">
+                    <i class="fas fa-fw fa-lightbulb"></i>
+                    <span>Illumination</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Acquisition
+            </div>
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item {% if active == "acquire" %}active{% endif %}">
+                <a class="nav-link {% if not enabled %}disabled{% endif %}" href="/acquire">
+                    <i class="fas fa-fw fa-play"></i>
+                    <span>Acquire</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <div class="sidebar-heading">
+                Tools
+            </div>
+
+            <li class="nav-item {% if active == "anotador" %}active{% endif %}">
+                <a class="nav-link {% if not enabled %}disabled{% endif %}" href="http://0.0.0.0:3000/ui/v1/index.html" target="_blank">
+                    <i class="fas fa-fw fa-pencil-alt"></i>
+                    <span>Visualizer</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+            
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+
+        <!-- End of Sidebar -->

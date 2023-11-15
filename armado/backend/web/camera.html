@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-dark">Camera setup</h6>
+        </div>
+        <div class="card-body">
+            <p>
+                Tune up exposure times to maximize the useful range (center illumination).
+                Select the exposure scheme applied for the rest.
+            </p>
+            <div class="row m-0 p-0">
+                <div class="col-11 col-xl-4">
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-dark">Red</h6>
+                        </div>
+                        <div class="card-body" id="card-exp-r">
+                            <div id="loading-r" style="position: absolute">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Acquiring image...
+                            </div>
+                            <div id="hist_r" class="text-center pt-2" style="min-height: 40px"></div>
+                            <label for="red_exposure">Exposure</label>
+                            <input type="range"
+                                   class="form-control-range custom-range"
+                                   id="red_exposure"
+                                   onchange="hist_exp('r', this.value)"
+                                   value={{ exp_r }}
+                                   min={{ exp_min }}
+                                   max={{ exp_max }}
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-11 col-xl-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-dark">Green</h6>
+                        </div>
+                        <div class="card-body" id="card-exp-g">
+                            <div id="loading-g" style="position: absolute">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Acquiring image...
+                            </div>
+                            <div id="hist_g" class="text-center pt-2" style="min-height: 40px"></div>
+                            <label for="green_exposure">Exposure</label>
+                            <input type="range"
+                                   class="form-control-range custom-range"
+                                   id="green_exposure"
+                                   onchange="hist_exp('g', this.value)"
+                                   value={{ exp_g }}
+                                   min={{ exp_min }}
+                                   max={{ exp_max }}
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-11 col-xl-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-dark">Blue</h6>
+                        </div>
+                        <div class="card-body" id="card-exp-b">
+                            <div id="loading-b" style="position: absolute; float: right">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Acquiring image...
+                            </div>
+                            <div id="hist_b" class="text-center pt-2" style="min-height: 40px"></div>
+                            <label for="blue_exposure">Exposure</label>
+                            <input type="range"
+                                   class="form-control-range custom-range"
+                                   id="blue_exposure"
+                                   onchange="hist_exp('b', this.value)"
+                                   value={{ exp_b }}
+                                   min={{ exp_min }}
+                                   max={{ exp_max }}
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-0 p-0">
+                <div class="col-11 my-auto mx-auto mx-md-0">
+                    <div class="form-group row">
+                        <label for="scheme" class="col-sm-2 col-form-label">Exposition scheme</label>
+                        <div class="col-sm-5">
+                            <select id="scheme" class="form-control mr-5" aria-label="Default select example" onchange="changeScheme()">
+                                <option value="diamond">Gaussian (recommended)</option>
+                            </select>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        hist_exp("r", {{ exp_r }});
+        hist_exp("g", {{ exp_g }});
+        hist_exp("b", {{ exp_b }});
+
+        function hist_exp(color, exp){
+            var req = new XMLHttpRequest();
+            req.open('GET', `/histogram/${color}/${exp}`, true);
+            req.onreadystatechange = function (aEvt) {
+                if (req.readyState === 4) {
+                    if(req.status === 200) {
+                        document.getElementById(`hist_${color}`).innerHTML = req.responseText;
+                        document.getElementById(`loading-${color}`).style.display = "none";
+                        save();
+                    } else {
+                        console.log("Error loading page\n");
+                    }
+                }
+            };
+            document.getElementById(`loading-${color}`).style.display = "block";
+            req.send();
+        }
+
+        function save(){
+            var req = new XMLHttpRequest();
+            req.open('POST', `/camera`, true);
+            req.onreadystatechange = function (aEvt) {
+                if (req.readyState === 4) {
+                    if(req.status === 200) {
+
+                    } else {
+                        console.log("Error loading page\n");
+                    }
+                }
+            };
+            let data = {
+                r_exp: document.getElementById("red_exposure").value,
+                g_exp: document.getElementById("green_exposure").value,
+                b_exp: document.getElementById("blue_exposure").value,
+            }
+            req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            req.send(JSON.stringify(data))
+        }
+    </script>
+
+{% endblock %}

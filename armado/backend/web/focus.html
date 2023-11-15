@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-dark">Focus setup</h6>
+        </div>
+        <div class="card-body">
+            <p>
+                Use the manual focus control to optimize the image.
+                Press the update button when the change is ready.
+                Remember to lock the control when you finish.
+            </p>
+            <div id="image-container" class="m-auto" style="width: 40vw">
+            </div>
+            <button class="btn btn-dark" id="refresh" onclick="update_capture('rgb', {{ exp }}, {{ x }}, {{ y }})">Refresh</button>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        update_capture("rgb", {{ exp }}, {{ x }}, {{ y }});
+        var image = "";
+
+        function update_capture(color, exp, x, y){
+            var req = new XMLHttpRequest();
+            req.open('GET', `/capture/${color}/${exp}/${x}/${y}`, true);
+            req.onreadystatechange = function (aEvt) {
+                if (req.readyState === 4) {
+                    if (req.status === 200) {
+                        image = req.responseText;
+                        document.getElementById(`image-container`).innerHTML = req.responseText
+                        document.getElementById(`refresh`).innerHTML = `Refresh`;
+                    } else {
+                        console.log("Error loading page\n");
+                    }
+                }
+            };
+            req.send();
+            document.getElementById(`refresh`).innerHTML = `
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Acquiring image...
+            `
+        }
+    </script>
+
+{% endblock %}

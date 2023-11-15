@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block content %}
+    </form>
+        <div class="row justify-content-center m-0 p-0">
+            <div class="col-12 col-xxl-10">
+                <div class="text-center my-3">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-dark">Acquisition setup</h6>
+                        </div>
+                        <div class="card-body">
+
+                            <!-- Card Sample -->
+                            <div class="card border-{{ sample_state }} mb-3">
+                                <div class="card-header alert-{{ sample_state }} font-weight-bold">Sample </div>
+                                <div class="card-body text-secondary">
+                                    <div class="row">
+                                        <div class="col-12 m-0 col-md-4">
+                                            <label class="sr-only" for="sample-name">Name</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Name</div>
+                                                </div>
+                                                <input type="text" class="form-control w-20" {% if not name %}placeholder="[automatic timestamp]"{% endif %} id="sample-name" readonly value="{{ name }}" onclick="window.location='/sample'">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 m-0 col-md-8">
+                                            <label class="sr-only" for="sample-description">Username</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Description</div>
+                                                </div>
+                                                <input type="text" cols="2" class="form-control w-70" id="sample-description" readonly value="{{ description }}" onclick="window.location='/sample'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if not name and not description %}
+                                    <small class="form-text text-muted alert-warning" onclick="window.location='/sample'">Add a description when the name is automatic</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Card Camera -->
+                            <div class="card border-{{ camera_state }} mb-3">
+                                <div class="card-header alert-{{ camera_state }} font-weight-bold">Camera </div>
+                                <div class="card-body text-secondary">
+                                    <div class="row">
+                                        <div class="col-12 m-0 col-md-5">
+                                            <label class="sr-only" for="exposure-scheme">Exposure scheme</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Exposure scheme</div>
+                                                </div>
+                                                <input type="text" class="form-control w-20" id="exposure-scheme" readonly value="{{ exp_scheme }}" onclick="window.location='/camera'">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 m-0 col-md-7">
+                                            <label class="sr-only" for="red-exposure">Red exposure</label>
+                                            <label class="sr-only" for="green-exposure">Green exposure</label>
+                                            <label class="sr-only" for="blue-exposure">Blue exposure</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend mr-2 d-none d-md-block">
+                                                    <div class="input-group-text">Central exposures</div>
+                                                </div>
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">R</div>
+                                                </div>
+                                                <input type="text" class="form-control w-70" id="red-exposure" readonly value="{{ red_exp }}" onclick="window.location='/camera'">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">G</div>
+                                                </div>
+                                                <input type="text" class="form-control w-70" id="green-exposure" readonly value="{{ green_exp }}" onclick="window.location='/camera'">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">B</div>
+                                                </div>
+                                                <input type="text" class="form-control w-70" id="blue-exposure" readonly value="{{ blue_exp }}" onclick="window.location='/camera'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card Illumination -->
+                            <div class="card border-{{ illumination_state }} mb-3">
+                                <div class="card-header alert-{{ illumination_state }} font-weight-bold">Illumination </div>
+                                <div class="card-body text-secondary">
+                                    <div class="row">
+                                        <div class="col-12 m-0 col-md-4">
+                                            <label class="sr-only" for="illumination-scheme">Scheme</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Scheme</div>
+                                                </div>
+                                                <input type="text" class="form-control w-20" id="illumination-scheme" readonly value="{{ scheme }}" onclick="window.location='/illumination'">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 m-0 col-md-2">
+                                            <label class="sr-only" for="colors">Colors</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Colors</div>
+                                                </div>
+                                                <input type="text" class="form-control w-20" id="colors" readonly value="{{ colors }}" onclick="window.location='/illumination'">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 m-0 col-md-6">
+                                            <label class="sr-only" for="n-leds">Leds</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Number of LEDs</div>
+                                                </div>
+                                                <input type="text" class="form-control w-20" id="n-leds" readonly value="{{ n_leds }}" onclick="window.location='/illumination'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 m-0 col-md-5">
+                                            <label class="sr-only" for="eta">Estimated duration</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Estimated duration</div>
+                                                </div>
+                                                <input type="text" class="form-control w-20" id="eta" readonly value="{% if eta_hours > 0 %}{{ eta_hours }} hours, {% endif %}{{ eta_minutes }} minutes" onclick="window.location='/illumination'">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 m-0 col-md-7">
+                                            <label class="sr-only" for="colors">Required disk space</label>
+                                            <div class="input-group mb-2 mr-sm-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">Required disk space</div>
+                                                </div>
+                                                <input type="text" class="form-control w-20" id="space" readonly value="Disk request: {{ "%.2f"|format(request_space_gb) }}gb / {{ "%.2f"|format(free_space_gb) }}gb (free)" onclick="window.location='/illumination'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if request_space_gb > free_space_gb %}
+                                        <small class="form-text text-muted alert-danger" onclick="window.location='/illumination'">Insufficient disk space</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-11 col-md-5 m-auto">
+                                    {% if illumination_state == "success" and camera_state == "success" and sample_state == "success" %}
+                                    <a class="btn btn-primary me-3" role="button" onclick="start_acquisition()">Start acquisition</a>
+                                    {% else %}
+                                    <a class="btn btn-danger me-3 btn-disabled disabled" role="button">Start acquisition</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+{%endblock%}
+
+{% block scripts %}
+    <script>
+        function start_acquisition(){
+            let req = new XMLHttpRequest();
+            req.open('POST', `/start`, true);
+            req.onreadystatechange = function (aEvt) {
+                if (req.readyState === 4) {
+                    if(req.status === 200) {
+                        window.location = "/status"
+                    } else {
+                        console.log("Error loading page\n");
+                    }
+                }
+            };
+            req.send()
+        }
+    </script>
+
+{% endblock %}

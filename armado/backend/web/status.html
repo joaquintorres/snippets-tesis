@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-dark">Tasks</h6>
+        </div>
+        <div class="card-body">
+            {% if enabled %}
+            <p>
+                No task in queue. Setup the acquisition following the links in the sidebar.
+            </p>
+            {% else %}
+                <p>
+                Acquisition in progress.
+                </p>
+                <div class="progress">
+                    <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        window.setTimeout(update, 500);
+        function update(){
+            let req = new XMLHttpRequest();
+            req.open('POST', `/status`, true);
+            req.onreadystatechange = function (aEvt) {
+                if (req.readyState === 4) {
+                    if(req.status === 200) {
+                        let data = JSON.parse(req.responseText);
+                        console.log(data)
+                        let progress_element = document.getElementById(`progress`)
+                        progress_element.style.width = `${data.progress * 100}%`;
+                        if (data.progress < 1.00) {
+                            window.setTimeout(update, 500);
+                        } else {
+                            window.location = "/";
+                        }
+                    } else {
+                        console.log("Error loading page\n");
+                    }
+                }
+            };
+            req.send()
+        }
+    </script>
+
+{% endblock %}

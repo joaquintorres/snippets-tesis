@@ -1,0 +1,5 @@
+BIT_DEPTH = 16
+ROI = ((0, 0), (5544, 3684))
+PORT = "/dev/ttyACM0"
+
+DATA_BIT_DEPTH = 14

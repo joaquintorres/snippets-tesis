@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-dark">Illumination setup</h6>
+        </div>
+        <div class="card-body">
+            <p>
+                Select the illumination scheme and colors.
+            </p>
+            <div class="row">
+                <div class="col-11 col-md-4">
+                    <div id="illumination" class="text-center m-auto w-100" style="min-height: 40px"></div>
+                </div>
+                <div class="col-11 col-md-6 my-auto mx-auto mx-md-0">
+                    <div class="form-group row">
+                        <label for="size" class="col-sm-3 col-form-label">Size</label>
+                        <div class="col-sm-8">
+                            <select id="size" class="form-control mr-5" aria-label="Default select example" onchange="changeScheme()">
+                                <option value="32">Full (31x31)</option>
+                                <option value="16">Partial (15x15)</option>
+                                <option value="8">Minimum (7x7)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="scheme" class="col-sm-3 col-form-label">Scheme</label>
+                        <div class="col-sm-8">
+                            <select id="scheme" class="form-control mr-5" aria-label="Default select example" onchange="changeScheme()">
+                                <option value="diamond">Diamond (recommended)</option>
+                                <option value="circle">Circle</option>
+                                <option value="square">Square</option>
+                            </select>
+                        </div>
+                    </div>
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-3 pt-0">Colors</legend>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="red" onchange="changeScheme()">
+                                    <label class="form-check-label" for="gridCheck1">
+                                        Red
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="green" onchange="changeScheme()">
+                                    <label class="form-check-label" for="gridCheck1">
+                                        Green
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="blue" onchange="changeScheme()">
+                                    <label class="form-check-label" for="gridCheck1">
+                                        Blue
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <small id="eta" class="form-text text-muted">Estimated time: 2 hours, 25 minutes</small>
+                    <small id="space" class="form-text text-muted">Disk request: 23.7gb / 50gb (free)</small>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.getElementById('size').value = {{ size }};
+        document.getElementById('scheme').value = "{{ scheme }}";
+        document.getElementById('red').checked = {{ red|tojson }};
+        document.getElementById('green').checked = {{ green|tojson }};
+        document.getElementById('blue').checked = {{ blue|tojson }};
+
+        changeScheme();
+
+        function changeScheme(){
+            let req = new XMLHttpRequest();
+            let size = document.getElementById('size').value;
+            let f_mask = document.getElementById('scheme').value;
+            let colors = "";
+            if (document.getElementById('red').value) {
+                colors += "r";
+            }
+            if (document.getElementById('green').value) {
+                colors += "g";
+            }
+            if (document.getElementById('blue').value) {
+                colors += "b";
+            }
+            req.open('GET', `/pattern/${size}/${f_mask}/${colors}`, true);
+            req.onreadystatechange = function (aEvt) {
+                if (req.readyState === 4) {
+                    if(req.status === 200) {
+                        document.getElementById(`illumination`).innerHTML = req.responseText;
+                    } else {
+                        console.log("Error loading page\n");
+                    }
+                }
+            };
+            save()
+            req.send()
+        }
+
+        function save(){
+            let req = new XMLHttpRequest();
+            req.open('POST', `/illumination`, true);
+            req.onreadystatechange = function (aEvt) {
+                if (req.readyState === 4) {
+                    if(req.status === 200) {
+                        let data = JSON.parse(req.responseText);
+                        let eta_element = document.getElementById(`eta`)
+                        let space_element = document.getElementById(`space`)
+                        eta_element.innerHTML = `
+                            Estimated time: ${data.eta_hours} hours, ${data.eta_minutes} minutes
+                        `;
+                        space_element.innerHTML = `
+                            Disk request: ${data.request_space_gb}gb / ${data.free_space_gb}gb (free)
+                        `;
+                        if (parseFloat(data.request_space_gb) > parseFloat(data.free_space_gb)){
+                            space_element.classList.remove(...space_element.classList);
+                            space_element.classList.add("btn-danger");
+                        } else {
+                            space_element.classList.remove("btn-danger");
+                            space_element.classList.add("form-text", "text-muted");
+                        }
+                    } else {
+                        console.log("Error loading page\n");
+                    }
+                }
+            };
+            let data = {
+                size: document.getElementById('size').value,
+                scheme: document.getElementById('scheme').value,
+                red: document.getElementById('red').checked,
+                green: document.getElementById('green').checked,
+                blue: document.getElementById('blue').checked,
+            }
+            req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            req.send(JSON.stringify(data))
+        }
+
+    </script>
+{% endblock %}
